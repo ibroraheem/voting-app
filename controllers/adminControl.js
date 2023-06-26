@@ -1,6 +1,8 @@
 const jwt = require('jsonwebtoken')
 const Admin = require('../models/admin')
 const User = require('../models/user')
+const Candidate = require('../models/candidate')
+
 
 const getAllUsers = async (req, res) => {
     try {
@@ -49,6 +51,65 @@ const deleteUser = async (req, res) => {
     }
 }
 
-module.exports = { getAllUsers, getUser, deleteUser }
+const addCandidate = async (req, res) => {
+    try{
+        const {surname, firstName, department, level,  nickname, photo, otherName, post} = req.body
+        const token = req.headers.authorization.split(' ')[1]
+        if (!token) return res.status(400).json({ message: 'No token provided' })
+        const decoded = jwt.verify(token, process.env.JWT_SECRET)
+        const admin = await Admin.findOne({ _id: decoded.id })
+        if (!admin) return res.status(400).json({ message: 'Admin does not exist' })
+        const candidate = await Candidate.findOne({ nickname })
+        if (candidate) return res.status(400).json({ message: 'Candidate already exists' })
+        const newCandidate = new Candidate({
+            surname,
+            firstName,
+            department,
+            level,
+            nickname,
+            post,
+            photo,
+            otherName
+        })
+        await newCandidate.save()
+        res.status(201).json({ message: 'Candidate created successfully' })  
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ message: error.message })
+    }
+}
+
+const getCandidate = async (req, res) => {
+    try {
+        const token = req.headers.authorization.split(' ')[1]
+        if (!token) return res.status(400).json({ message: 'No token provided' })
+        const decoded = jwt.verify(token, process.env.JWT_SECRET)
+        const admin = await Admin.findOne({ _id: decoded.id })
+        if (!admin) return res.status(400).json({ message: 'Admin does not exist' })
+        const candidate = await Candidate.findOne({ _id: req.params.id })
+        if (!candidate) return res.status(400).json({ message: 'Candidate does not exist' })
+        res.status(200).json({ id: candidate.id, name: candidate.surname.toUpperCase()+',' + ' ' + candidate.firstName, department: candidate.department, level: candidate.level, nickname: candidate.nickname, photo: candidate.photo, otherName: candidate.otherName })
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ message: error.message })
+    }
+}
+
+const getCandidates = async (req, res) => {
+    try {
+        const token = req.headers.authorization.split(' ')[1]
+        if (!token) return res.status(400).json({ message: 'No token provided' })
+        const decoded = jwt.verify(token, process.env.JWT_SECRET)
+        const admin = await Admin.findOne({ _id: decoded.id })
+        if (!admin) return res.status(400).json({ message: 'Admin does not exist' })
+        const candidate = await Candidate.find()
+        res.status(200).json({ candidate })
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ message: error.message })
+    }
+}
+
+module.exports = { getAllUsers, getUser, deleteUser, addCandidate, getCandidate, getCandidates  }
 
 

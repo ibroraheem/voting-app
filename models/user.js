@@ -60,7 +60,21 @@ const userSchema = new mongoose.Schema({
     email: {
         type: String,
         required: true,
-    }
+    },
+    votingOtp:{
+        type: String,
+    },
+    votingOtpExpires:{
+        type: Date,
+    },
+    isAccredited:{
+        type: Boolean,
+        default: false,
+    },
+    hasVoted:{
+        type: Boolean,
+        default: false,
+    },
 }, { timestamps: true })
 
 const User = mongoose.model('User', userSchema)
