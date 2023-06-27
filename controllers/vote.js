@@ -62,6 +62,26 @@ const verifyVotingOtp = async (req, res) => {
     }
 }
 
+const getCandidates = async (req, res) => {
+    try {
+        const token = req.headers.authorization.split(' ')[1]
+        if (!token) return res.status(400).json({ message: 'No token provided' })
+        const decoded = jwt.verify(token, process.env.JWT_SECRET)
+        const user = await User.findOne({ _id: decoded.id })
+        if (!user) return res.status(400).json({ message: 'User does not exist' })
+        if (!user.isAccredited) return res.status(400).json({ message: 'User is not accredited' })
+        if (user.hasVoted) return res.status(400).json({ message: 'User has already voted' })
+        //get all candidates except candidates with post of SRC
+        const candidates = await Candidate.find({ post: { $ne: 'SRC' } })
+        const src = await Candidate.find({ post: 'SRC', department: user.department })
+        res.status(200).json({ candidates, src })
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ message: error.message })
+    }
+}
+
+
 const vote = async (req, res) => {
     try {
         const { ballot } = req.body
@@ -122,7 +142,7 @@ const vote = async (req, res) => {
         technical.votes += 1
         technical.voters.push(user.matric)
         await technical.save()
-        const src = await Candidate.findOne({ _id: ballot.src })
+        const src = await Candidate.find({ _id: ballot.src })
         if (!src) return res.status(400).json({ message: 'SRC Representative does not exist' })
         src.votes += 1
         src.voters.push(user.matric)
@@ -136,5 +156,5 @@ const vote = async (req, res) => {
     }
 }
 
-module.exports = { generateOtp, verifyVotingOtp, vote }
+module.exports = { generateOtp, verifyVotingOtp, vote, getCandidates }
 
