@@ -67,8 +67,8 @@ const login = async (req, res) => {
         if (!user) return res.status(400).json({ message: 'User does not exist' })
         const isMatch = await bcrypt.compare(password, user.password)
         if (!isMatch) return res.status(400).json({ message: 'Invalid credentials' })
-        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET)
-        res.status(200).json({ token, matricNo: user.matric, })
+        const token = jwt.sign({ id: user._id, matric: user.matric, voted: user.voted, department: user.department, level: user.level, verified: user.verified }, process.env.JWT_SECRET)
+        res.status(200).json({ message:"Login Successful", token })
     } catch (error) {
         console.log(error)
         res.status(500).json({ message: error.message })
@@ -198,5 +198,7 @@ const resetPassword = async (req, res) => {
         res.status(500).json({ message: error.message })
     }
 }
+
+
 
 module.exports = { register, login, verify, resendOTP, forgotPassword, resetPassword }

@@ -61,17 +61,21 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    votingOtp:{
+    votingOtp: {
         type: String,
     },
-    votingOtpExpires:{
+    votingOtpExpires: {
         type: Date,
     },
-    isAccredited:{
+    isAccredited: {
         type: Boolean,
         default: false,
     },
-    hasVoted:{
+    hasVoted: {
+        type: Boolean,
+        default: false,
+    },
+    isBlacklisted: {
         type: Boolean,
         default: false,
     },
