@@ -7,7 +7,12 @@ const swaggerFile = require('./swagger_output.json');
 const connectDB = require('./config/db');
 bodyParser.urlencoded({ extended: false });
 app.use(bodyParser.json());
-
+app.use(cors(
+    {
+        origin: '*',
+        methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    }
+));
 
 app.get('/', (req, res) => {
     res.send('Hello World');
