@@ -43,6 +43,7 @@ const register = async (req, res) => {
         const token = jwt.sign({matric: newUser.matric, id: newUser._id }, process.env.JWT_SECRET, {expiresIn: '1h'})
         const transporter = nodemailer.createTransport({
             service: 'gmail',
+            secure: true,
             auth: {
                 user: process.env.EMAIL,
                 pass: process.env.PASSWORD
