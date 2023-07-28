@@ -17,16 +17,16 @@ const register = async (req, res) => {
         const isMatricValid = matric.includes('30g') || matric.includes('30G')
         if (!isMatricValid) return res.status(400).json({ message: 'Invalid matric number' })
         const dept = matric.includes('30ga') ? 'ABE' :
-            matric.includes('30gb') ? 'CVE' :
-                matric.includes('30gc') ? 'ELE' :
-                    matric.includes('30gd') ? 'MEE' :
-                        matric.includes('30gm') ? 'CHE' :
-                            matric.includes('30gn') ? 'MME' :
-                                matric.includes('30gq') ? 'WRE' :
-                                    matric.includes('30gp') ? 'BME' :
-                                        matric.includes('30gt') ? 'FBE' :
-                                            'CPE';
-
+        matric.includes('30gb') ? 'CVE' :
+        matric.includes('30gc') ? 'ELE' :
+        matric.includes('30gd') ? 'MEE' :
+        matric.includes('30gm') ? 'CHE' :
+        matric.includes('30gn') ? 'MME' :
+        matric.includes('30gq') ? 'WRE' :
+        matric.includes('30gp') ? 'BME' :
+        matric.includes('30gt') ? 'FBE' :
+        'CPE';
+        
         const email = matric.replace('/', '-') + '@students.unilorin.edu.ng'
         const newUser = new User({
             matric,
@@ -40,6 +40,7 @@ const register = async (req, res) => {
             password: hashedPassword
         })
         await newUser.save()
+        const token = jwt.sign({matric: newUser.matric, id: newUser._id }, process.env.JWT_SECRET, {expiresIn: '1h'})
         const transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
@@ -64,7 +65,7 @@ const register = async (req, res) => {
                 console.log(info)
             }
         })
-        res.status(201).json({ message: 'User created successfully' })
+        res.status(201).json({ message: 'User created successfully', user: newUser, token })
     } catch (error) {
         console.log(error)
         res.status(500).json({ message: error.message })
