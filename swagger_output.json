@@ -5,10 +5,10 @@
     "title": "REST API",
     "description": ""
   },
-  "host": "https://gold-brainy-barnacle.cyclic.app",
+  "host": "localhost:3000",
   "basePath": "/",
   "schemes": [
-    "https"
+    "http"
   ],
   "paths": {
     "/": {
@@ -38,9 +38,6 @@
                   "example": "any"
                 },
                 "firstName": {
-                  "example": "any"
-                },
-                "department": {
                   "example": "any"
                 },
                 "level": {
@@ -500,9 +497,6 @@
                   "example": "any"
                 },
                 "firstName": {
-                  "example": "any"
-                },
-                "department": {
                   "example": "any"
                 },
                 "level": {
