@@ -8,7 +8,7 @@
   "host": "https://gold-brainy-barnacle.cyclic.app",
   "basePath": "/",
   "schemes": [
-    "http"
+    "https"
   ],
   "paths": {
     "/": {
