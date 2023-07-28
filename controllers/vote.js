@@ -33,9 +33,10 @@ const generateOtp = async (req, res) => {
                 console.log(err)
             } else {
                 console.log(info)
+                res.status(200).json({ message: 'OTP sent successfully' })
             }
         })
-        res.status(200).json({ message: 'OTP sent successfully' })
+
     } catch (error) {
         console.log(error)
         res.status(500).json({ message: error.message })
