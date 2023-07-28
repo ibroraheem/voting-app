@@ -8,7 +8,7 @@ require('dotenv').config()
 
 const register = async (req, res) => {
     try {
-        const { matric, surname, firstName, department, level, password } = req.body
+        const { matric, surname, firstName, level, password } = req.body
         const user = await User.findOne({ matric })
         if (user) return res.status(400).json({ message: 'User already exists' })
         const hashedPassword = await bcrypt.hash(password, 10)
@@ -16,13 +16,24 @@ const register = async (req, res) => {
         const otpExpires = Date.now() + 3600000
         const isMatricValid = matric.includes('30g') || matric.includes('30G')
         if (!isMatricValid) return res.status(400).json({ message: 'Invalid matric number' })
+        const dept = matric.includes('30ga') ? 'ABE' :
+            matric.includes('30gb') ? 'CVE' :
+                matric.includes('30gc') ? 'ELE' :
+                    matric.includes('30gd') ? 'MEE' :
+                        matric.includes('30gm') ? 'CHE' :
+                            matric.includes('30gn') ? 'MME' :
+                                matric.includes('30gq') ? 'WRE' :
+                                    matric.includes('30gp') ? 'BME' :
+                                        matric.includes('30gt') ? 'FBE' :
+                                            'CPE';
+
         const email = matric.replace('/', '-') + '@students.unilorin.edu.ng'
         const newUser = new User({
             matric,
             surname,
             firstName,
             level,
-            department,
+            department: dept,
             otp,
             email,
             otpExpires,
@@ -68,7 +79,7 @@ const login = async (req, res) => {
         const isMatch = await bcrypt.compare(password, user.password)
         if (!isMatch) return res.status(400).json({ message: 'Invalid credentials' })
         const token = jwt.sign({ id: user._id, matric: user.matric, voted: user.voted, department: user.department, level: user.level, verified: user.verified }, process.env.JWT_SECRET)
-        res.status(200).json({ message:"Login Successful", token })
+        res.status(200).json({ message: "Login Successful", token })
     } catch (error) {
         console.log(error)
         res.status(500).json({ message: error.message })

@@ -53,7 +53,7 @@ const deleteUser = async (req, res) => {
 
 const addCandidate = async (req, res) => {
     try{
-        const {surname, firstName, department, level,  nickname, photo, otherName, post} = req.body
+        const {surname, firstName,  level,  nickname, photo, otherName, post} = req.body
         const token = req.headers.authorization.split(' ')[1]
         if (!token) return res.status(400).json({ message: 'No token provided' })
         const decoded = jwt.verify(token, process.env.JWT_SECRET)
@@ -61,10 +61,20 @@ const addCandidate = async (req, res) => {
         if (!admin) return res.status(400).json({ message: 'Admin does not exist' })
         const candidate = await Candidate.findOne({ nickname })
         if (candidate) return res.status(400).json({ message: 'Candidate already exists' })
+        const dept = matric.includes('30ga') ? 'ABE' :
+        matric.includes('30gb') ? 'CVE' :
+            matric.includes('30gc') ? 'ELE' :
+                matric.includes('30gd') ? 'MEE' :
+                    matric.includes('30gm') ? 'CHE' :
+                        matric.includes('30gn') ? 'MME' :
+                            matric.includes('30gq') ? 'WRE' :
+                                matric.includes('30gp') ? 'BME' :
+                                    matric.includes('30gt') ? 'FBE' :
+                                        'CPE';
         const newCandidate = new Candidate({
             surname,
             firstName,
-            department,
+            department: dept,
             level,
             nickname,
             post,
