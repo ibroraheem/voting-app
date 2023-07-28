@@ -28,7 +28,7 @@ const login = async (req, res) => {
         const isMatch = await bcrypt.compare(password, admin.password)
         if (!isMatch) return res.status(400).json({ message: 'Invalid credentials' })
         const token = jwt.sign({ id: admin._id }, process.env.JWT_SECRET)
-        res.status(200).json({ token, email: admin.email })
+        res.status(200).json({ token, email: admin.email, role: admin.role })
     } catch (error) {
         console.log(error)
         res.status(500).json({ message: error.message })
