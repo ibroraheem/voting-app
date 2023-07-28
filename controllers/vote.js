@@ -17,6 +17,7 @@ const generateOtp = async (req, res) => {
         await user.save()
         const transporter = nodemailer.createTransport({
             service: 'gmail',
+            secure: true,
             auth: {
                 user: process.env.EMAIL,
                 pass: process.env.EMAIL_PASSWORD
@@ -31,6 +32,7 @@ const generateOtp = async (req, res) => {
         transporter.sendMail(mailOptions, (err, info) => {
             if (err) {
                 console.log(err)
+                res.status(500).json({ message: err.message })
             } else {
                 console.log(info)
                 res.status(200).json({ message: 'OTP sent successfully' })
