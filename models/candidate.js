@@ -15,7 +15,6 @@ const candidateSchema = new mongoose.Schema({
     },
     otherName: {
         type: String,
-        required: true,
     },
     photo: {
         type: String,
