@@ -162,6 +162,7 @@ const forgotPassword = async (req, res) => {
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET)
         const transporter = nodemailer.createTransport({
             service: 'gmail',
+            secure: true,
             auth: {
                 user: process.env.EMAIL,
                 pass: process.env.PASSWORD
