@@ -79,6 +79,7 @@ const addCandidate = async (req, res) => {
             nickname,
             post,
             photo,
+            matric,
             otherName
         })
         await newCandidate.save()
