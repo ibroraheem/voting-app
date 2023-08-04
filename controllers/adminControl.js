@@ -53,7 +53,7 @@ const deleteUser = async (req, res) => {
 
 const addCandidate = async (req, res) => {
     try{
-        const {surname, firstName,  level,  nickname, photo, otherName, post} = req.body
+        const {surname, firstName, matric,  level,  nickname, photo, otherName, post} = req.body
         const token = req.headers.authorization.split(' ')[1]
         if (!token) return res.status(400).json({ message: 'No token provided' })
         const decoded = jwt.verify(token, process.env.JWT_SECRET)
