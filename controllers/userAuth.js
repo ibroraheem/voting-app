@@ -40,7 +40,7 @@ const register = async (req, res) => {
             password: hashedPassword
         })
         await newUser.save()
-        const token = jwt.sign({matric: newUser.matric, id: newUser._id }, process.env.JWT_SECRET, {expiresIn: '1h'})
+        const token = jwt.sign({id: newUser._id, matric: newUser.matric, voted: newUser.voted, department: newUser.department, level: newUser.level, isVerified: newUser.isVerified, role: newUser.role, isAccredited: newUser.isAccredited }, process.env.JWT_SECRET, {expiresIn: '1h'})
         const transporter = nodemailer.createTransport({
             service: 'gmail',
             secure: true,
@@ -80,7 +80,7 @@ const login = async (req, res) => {
         if (!user) return res.status(400).json({ message: 'User does not exist' })
         const isMatch = await bcrypt.compare(password, user.password)
         if (!isMatch) return res.status(400).json({ message: 'Invalid credentials' })
-        const token = jwt.sign({ id: user._id, matric: user.matric, voted: user.voted, department: user.department, level: user.level, isVerified: user.isVerified, role: user.role }, process.env.JWT_SECRET)
+        const token = jwt.sign({ id: user._id, matric: user.matric, voted: user.voted, department: user.department, level: user.level, isVerified: user.isVerified, role: user.role, isAccredited: user.isAccredited }, process.env.JWT_SECRET)
         res.status(200).json({ message: "Login Successful", token })
     } catch (error) {
         console.log(error)
