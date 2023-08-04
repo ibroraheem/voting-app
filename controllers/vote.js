@@ -52,7 +52,7 @@ const verifyVotingOtp = async (req, res) => {
         const decoded = jwt.verify(token, process.env.JWT_SECRET)
         const user = await User.findOne({ _id: decoded.id })
         if (!user) return res.status(400).json({ message: 'User does not exist' })
-        if (user.votingOtp != req.body.Otp) return res.status(400).json({ message: 'Invalid OTP' })
+        if (user.votingOtp != req.body.otp) return res.status(400).json({ message: 'Invalid OTP' })
         if (user.votingOtpExpires < Date.now()) return res.status(400).json({ message: 'OTP has expired' })
         user.votingOtp = null
         user.votingOtpExpires = null
