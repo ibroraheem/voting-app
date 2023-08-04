@@ -97,7 +97,7 @@ const verify = async (req, res) => {
         const user = await User.findOne({ _id: decoded.id })
         if (!user) return res.status(400).json({ message: 'User does not exist' })
         if (user.otpExpires < Date.now()) return res.status(400).json({ message: 'OTP has expired' })
-        if (user.otp !== otp) return res.status(400).json({ message: 'Invalid OTP' })
+        if (user.otp != otp) return res.status(400).json({ message: 'Invalid OTP' })
         user.isVerified = true
         user.status = 'verified'
         await user.save()
