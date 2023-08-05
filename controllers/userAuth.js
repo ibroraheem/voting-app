@@ -80,7 +80,7 @@ const login = async (req, res) => {
         if (!user) return res.status(400).json({ message: 'User does not exist' })
         const isMatch = await bcrypt.compare(password, user.password)
         if (!isMatch) return res.status(400).json({ message: 'Invalid credentials' })
-        const token = jwt.sign({ id: user._id, matric: user.matric, voted: user.voted, department: user.department, level: user.level, isVerified: user.isVerified, role: user.role, isAccredited: user.isAccredited }, process.env.JWT_SECRET)
+        const token = jwt.sign({ id: user._id, matric: user.matric, voted: user.voted, department: user.department, level: user.level, isVerified: user.isVerified, role: user.role, }, process.env.JWT_SECRET)
         res.status(200).json({ message: "Login Successful", token })
     } catch (error) {
         console.log(error)
@@ -101,7 +101,8 @@ const verify = async (req, res) => {
         user.isVerified = true
         user.status = 'verified'
         await user.save()
-        res.status(200).json({ message: 'User verified successfully' })
+        const newToken = jwt.sign({id: user._id, matric: user.matric, voted: user.voted, department: user.department, level: user.level, isVerified: user.isVerified, role: user.role,}, process.env.JWT_SECRET, {expiresIn: '1h'})
+        res.status(200).json({ message: 'User verified successfully', token: newToken })
     } catch (error) {
         console.log(error)
         res.status(500).json({ message: error.message })
