@@ -58,7 +58,8 @@ const verifyVotingOtp = async (req, res) => {
         user.votingOtpExpires = null
         user.isAccredited = true
         await user.save()
-        res.status(200).json({ message: 'OTP verified successfully' })
+        const newToken = jwt.sign({ id: user._id, matric: user.matric, voted: user.voted, department: user.department, level: user.level, isVerified: user.isVerified, role: user.role, isAccredited: user.isAccredited }, process.env.JWT_SECRET, { expiresIn: '1h' })
+        res.status(200).json({ message: 'OTP verified successfully', token: newToken })
     } catch (error) {
         console.log(error)
         res.status(500).json({ message: error.message })
