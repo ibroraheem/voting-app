@@ -74,7 +74,7 @@ const getCandidates = async (req, res) => {
         if (!user) return res.status(400).json({ message: 'User does not exist' })
         if (!user.isAccredited) return res.status(400).json({ message: 'User is not accredited' })
         if (user.hasVoted) return res.status(400).json({ message: 'User has already voted' })
-        //get all candidates except candidates with post of SRC
+
         const candidates = await Candidate.find({ post: { $ne: 'SRC' } })
         const src = await Candidate.find({ post: 'SRC', department: user.department })
         res.status(200).json({ candidates, src })
@@ -168,7 +168,8 @@ const vote = async (req, res) => {
         }
         user.hasVoted = true
         await user.save()
-        res.status(200).json({ message: 'Voting successful', hasVoted: user.hasVoted })
+        const newToken = jwt.sign({ id: user._id, matric: user.matric, voted: user.voted, department: user.department, level: user.level, isVerified: user.isVerified, role: user.role, isAccredited: user.isAccredited, hasVoted: user.hasVoted }, process.env.JWT_SECRET, { expiresIn: '1h' })
+        res.status(200).json({ message: 'Voting successful' })
     } catch (error) {
         console.log(error)
         res.status(500).json({ message: error.message })
