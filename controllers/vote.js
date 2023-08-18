@@ -75,15 +75,9 @@ const getCandidates = async (req, res) => {
         if (!user) return res.status(400).json({ message: 'User does not exist' })
         if (!user.isAccredited) return res.status(400).json({ message: 'User is not accredited' })
         if (user.hasVoted) return res.status(400).json({ message: 'User has already voted' })
-
         const candidates = await Candidate.find({ post: { $ne: 'SRC' } })
-        if (user.department === 'B.Agric') {
-            const src = await Candidate.find({ post: 'SRC', level: user.level })
-            res.status(200).json({ candidates, src })
-        } else {
-            const src = await Candidate.find({ post: 'SRC', department: user.department })
-            res.status(200).json({ candidates, src })
-        }
+        const src = await Candidate.find({ post: 'SRC', department: user.department })
+        res.status(200).json({ candidates, src })
     } catch (error) {
         console.log(error)
         res.status(500).json({ message: error.message })
@@ -155,18 +149,11 @@ const vote = async (req, res) => {
             pro.voters.push(user.matric)
             await pro.save()
         }
-        const librarian = await Candidate.findOne({ _id: ballot["librarian"] })
-        if (librarian) {
-            librarian.votes += 1
-            librarian.voters.push(user.matric)
+        const technical = await Candidate.findOne({ _id: ballot["technical director"] })
+        if (technical) {
+            technical.votes += 1
+            technical.voters.push(user.matric)
             await librarian.save()
-        }
-
-        const welfare2 = await Candidate.findOne({ _id: ballot["welfare2"] })
-        if (welfare2) {
-            welfare2.votes += 1
-            welfare.voters.push(user.matric)
-            await welfare2.save()
         }
         const src = await Candidate.find({ _id: ballot.src })
         if (src) {
