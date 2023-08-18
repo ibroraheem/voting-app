@@ -14,7 +14,7 @@ const register = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10)
         const otp = Math.floor(100000 + Math.random() * 900000).toString()
         const otpExpires = Date.now() + 3600000
-        const isMatricValid = matric.includes('30g') || matric.includes('30g')
+        const isMatricValid = matric.includes('30G') || matric.includes('30g')
         if (!isMatricValid) return res.status(400).json({ message: 'Invalid matric number' })
         const dept = matric.includes('30gc') ? 'ELE' :
             matric.includes('30gb') ? 'CVE' :
