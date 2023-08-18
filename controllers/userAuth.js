@@ -8,7 +8,9 @@ require('dotenv').config()
 
 const register = async (req, res) => {
     try {
-        const { matric, surname, firstName, level, password } = req.body
+        const { surname, firstName, level, password } = req.body
+        let matric = req.body.matric
+        matric = matric.toLowerCase()
         const user = await User.findOne({ matric })
         if (user) return res.status(400).json({ message: 'User already exists' })
         const hashedPassword = await bcrypt.hash(password, 10)
