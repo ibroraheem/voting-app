@@ -76,7 +76,7 @@ const getCandidates = async (req, res) => {
         if (!user.isAccredited) return res.status(400).json({ message: 'User is not accredited' })
         if (user.hasVoted) return res.status(400).json({ message: 'User has already voted' })
         const candidates = await Candidate.find({ post: { $ne: 'SRC' } })
-        const src = await Candidate.find({post: {$eq: 'SRC' }, department: user.department })
+        const src = await Candidate.find({post: {$eq: 'SRC' }, department: {$eq: user.department} })
         res.status(200).json({candidates, src})
     } catch (error) {
         console.log(error)
