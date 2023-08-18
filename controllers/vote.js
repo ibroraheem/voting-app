@@ -95,6 +95,7 @@ const vote = async (req, res) => {
         if (!user) return res.status(400).json({ message: 'User does not exist' })
         if (!user.isAccredited) return res.status(400).json({ message: 'User is not accredited' })
         if (user.hasVoted) return res.status(400).json({ message: 'User has already voted' })
+
         const president = await Candidate.findOne({ _id: ballot.president })
         if (president) {
             president.votes += 1
