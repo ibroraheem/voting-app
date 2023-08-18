@@ -14,19 +14,13 @@ const register = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10)
         const otp = Math.floor(100000 + Math.random() * 900000).toString()
         const otpExpires = Date.now() + 3600000
-        const isMatricValid = matric.includes('30g') || matric.includes('30G')
+        const isMatricValid = matric.includes('10a') || matric.includes('10a')
         if (!isMatricValid) return res.status(400).json({ message: 'Invalid matric number' })
-        const dept = matric.includes('30ga') ? 'ABE' :
-        matric.includes('30gb') ? 'CVE' :
-        matric.includes('30gc') ? 'ELE' :
-        matric.includes('30gd') ? 'MEE' :
-        matric.includes('30gm') ? 'CHE' :
-        matric.includes('30gn') ? 'MME' :
-        matric.includes('30gq') ? 'WRE' :
-        matric.includes('30gp') ? 'BME' :
-        matric.includes('30gt') ? 'FBE' :
-        'CPE';
-        
+        const dept = matric.includes('10ac') ? 'B.Agric' :
+            matric.includes('10as') ? 'Forestry' :
+                matric.includes('10ab') ? 'Aquaculture' :
+                    'Food Science and Home Economics'
+
         const email = matric.replace('/', '-') + '@students.unilorin.edu.ng'
         const newUser = new User({
             matric,
@@ -40,7 +34,7 @@ const register = async (req, res) => {
             password: hashedPassword
         })
         await newUser.save()
-        const token = jwt.sign({id: newUser._id, matric: newUser.matric, voted: newUser.voted, department: newUser.department, level: newUser.level, isVerified: newUser.isVerified, role: newUser.role, isAccredited: newUser.isAccredited }, process.env.JWT_SECRET, {expiresIn: '1h'})
+        const token = jwt.sign({ id: newUser._id, matric: newUser.matric, voted: newUser.voted, department: newUser.department, level: newUser.level, isVerified: newUser.isVerified, role: newUser.role, isAccredited: newUser.isAccredited }, process.env.JWT_SECRET, { expiresIn: '1h' })
         const transporter = nodemailer.createTransport({
             service: 'gmail',
             secure: true,
@@ -101,7 +95,7 @@ const verify = async (req, res) => {
         user.isVerified = true
         user.status = 'verified'
         await user.save()
-        const newToken = jwt.sign({id: user._id, matric: user.matric, voted: user.voted, department: user.department, level: user.level, isVerified: user.isVerified, role: user.role,}, process.env.JWT_SECRET, {expiresIn: '1h'})
+        const newToken = jwt.sign({ id: user._id, matric: user.matric, voted: user.voted, department: user.department, level: user.level, isVerified: user.isVerified, role: user.role, }, process.env.JWT_SECRET, { expiresIn: '1h' })
         res.status(200).json({ message: 'User verified successfully', token: newToken })
     } catch (error) {
         console.log(error)
