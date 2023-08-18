@@ -14,13 +14,18 @@ const register = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10)
         const otp = Math.floor(100000 + Math.random() * 900000).toString()
         const otpExpires = Date.now() + 3600000
-        const isMatricValid = matric.includes('10a') || matric.includes('10a')
+        const isMatricValid = matric.includes('30g') || matric.includes('30g')
         if (!isMatricValid) return res.status(400).json({ message: 'Invalid matric number' })
-        const dept = matric.includes('10ac') ? 'B.Agric' :
-            matric.includes('10as') ? 'Forestry' :
-                matric.includes('10ab') ? 'Aquaculture' :
-                    'Food Science and Home Economics'
-
+        const dept = matric.includes('30gc') ? 'ELE' :
+            matric.includes('30gb') ? 'CVE' :
+                matric.includes('30gq') ? 'WRE' :
+                    matric.includes('30gn') ? 'MME' :
+                        matric.includes('30ga') ? 'ABE' :
+                            matric.includes('30gr') ? 'CPE' :
+                                matric.includes('30gm') ? 'CHE' :
+                                    matric.includes('30gp') ? 'BME' :
+                                        matric.includes('30gt') ? 'FBE' :
+                                            'MEE'
         const email = matric.replace('/', '-') + '@students.unilorin.edu.ng'
         const newUser = new User({
             matric,
