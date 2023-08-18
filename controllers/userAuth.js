@@ -28,7 +28,7 @@ const register = async (req, res) => {
                                             'MEE'
         const email = matric.replace('/', '-') + '@students.unilorin.edu.ng'
         const newUser = new User({
-            matric,
+            matric: matric.toLowerCase(),
             surname,
             firstName,
             level,
