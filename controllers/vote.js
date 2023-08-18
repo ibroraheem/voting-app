@@ -99,61 +99,52 @@ const vote = async (req, res) => {
         const president = await Candidate.findOne({ _id: ballot.president })
         if (president) {
             president.votes += 1
-            president.voters.push(user.matric)
             await president.save()
         }
         const vicePresident = await Candidate.findOne({ _id: ballot["vice president"] })
         if (vicePresident) {
             vicePresident.votes += 1
-            vicePresident.voters.push(user.matric)
             await vicePresident.save()
         }
         const genSec = await Candidate.findOne({ _id: ballot["general secretary"] })
         if (genSec) {
             genSec.votes += 1
-            genSec.voters.push(user.matric)
             await genSec.save()
         }
         const ags = await Candidate.findOne({ _id: ballot["assistant general secretary"] })
         if (ags) {
             ags.votes += 1
-            ags.voters.push(user.matric)
             await ags.save()
         }
         const sportSec = await Candidate.findOne({ _id: ballot["sports secretary"] })
         if (sportSec) {
             sportSec.votes += 1
-            sportSec.voters.push(user.matric)
             await sportSec.save()
         }
         const welfare = await Candidate.findOne({ _id: ballot["welfare secretary"] })
         if (welfare) {
             welfare.votes += 1
-            welfare.voters.push(user.matric)
             await welfare.save()
         }
         const finSec = await Candidate.findOne({ _id: ballot["financial secretary"] })
         if (finSec) {
             finSec.votes += 1
-            finSec.voters.push(user.matric)
             await finSec.save()
         }
         const socialSec = await Candidate.findOne({ _id: ballot["social secretary"] })
         if (socialSec) {
             socialSec.votes += 1
-            socialSec.voters.push(user.matric)
             await socialSec.save()
         }
         const pro = await Candidate.findOne({ _id: ballot.pro })
         if (pro) {
             pro.votes += 1
-            pro.voters.push(user.matric)
             await pro.save()
         }
         const technical = await Candidate.findOne({ _id: ballot["technical director"] })
         if (technical) {
             technical.votes += 1
-            technical.voters.push(user.matric)
+    
             await technical.save()
         }
         const src = await Candidate.find({ _id: ballot.src })
@@ -162,7 +153,6 @@ const vote = async (req, res) => {
                 const src = await Candidate.findOne({ _id: srcId })
                 if (src) {
                     src.votes += 1
-                    src.voters.push(user.matric)
                     await src.save()
                 }
             })
