@@ -121,6 +121,19 @@ const getCandidates = async (req, res) => {
     }
 }
 
-module.exports = { getAllUsers, getUser, deleteUser, addCandidate, getCandidate, getCandidates  }
+const reset = async (req, res) => {
+    const candidates = await Candidate.find()
+    candidates.forEach(candidate => {
+        candidate.votes = 0
+        candidate.save()
+    })
+    const users = await User.find()
+    users.forEach(user => {
+        user.hasVoted = false
+        user.save()
+    })
+    res.status(200).json({message: "Reset done"})
+}
+module.exports = { getAllUsers, getUser, deleteUser, addCandidate, getCandidate, getCandidates, reset  }
 
 
