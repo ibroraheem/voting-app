@@ -75,7 +75,7 @@ const register = async (req, res) => {
 const login = async (req, res) => {
     try {
         const { matric, password } = req.body
-        const user = await User.findOne({ matric })
+        const user = await User.findOne({ matric: matric.toLowerCase() })
         if (!user) return res.status(400).json({ message: 'User does not exist' })
         const isMatch = await bcrypt.compare(password, user.password)
         if (!isMatch) return res.status(400).json({ message: 'Invalid credentials' })

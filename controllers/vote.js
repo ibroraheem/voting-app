@@ -154,7 +154,7 @@ const vote = async (req, res) => {
         if (technical) {
             technical.votes += 1
             technical.voters.push(user.matric)
-            await librarian.save()
+            await technical.save()
         }
         const src = await Candidate.find({ _id: ballot.src })
         if (src) {
