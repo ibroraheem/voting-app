@@ -20,6 +20,7 @@
     "nodemailer": "^6.9.3",
     "nodemon": "^2.0.22",
     "swagger-autogen": "^2.23.4",
-    "swagger-ui-express": "^4.6.3"
+    "swagger-ui-express": "^4.6.3",
+    "zest-node": "^1.0.2"
   }
 }
