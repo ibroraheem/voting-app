@@ -110,6 +110,6 @@ const getCandidates = async (req, res) => {
     }
 }
 
-module.exports = { getAllUsers, getUser, deleteUser, addCandidate, getCandidate, getCandidates }
+module.exports = { getAllUsers, getUser, deleteUser, addCandidate, getCandidate, getCandidates  }
 
 

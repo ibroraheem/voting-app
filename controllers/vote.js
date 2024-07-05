@@ -75,15 +75,9 @@ const getCandidates = async (req, res) => {
         if (!user) return res.status(400).json({ message: 'User does not exist' })
         if (!user.isAccredited) return res.status(400).json({ message: 'User is not accredited' })
         if (user.hasVoted) return res.status(400).json({ message: 'User has already voted' })
-
         const candidates = await Candidate.find({ post: { $ne: 'SRC' } })
-        if (user.department === 'B.Agric') {
-            const src = await Candidate.find({ post: 'SRC', level: user.level })
-            res.status(200).json({ candidates, src })
-        } else {
-            const src = await Candidate.find({ post: 'SRC', department: user.department })
-            res.status(200).json({ candidates, src })
-        }
+        let src = await Candidate.find({ post: 'SRC', department: { $eq: user.department } })
+        res.status(200).json({ candidates, src })
     } catch (error) {
         console.log(error)
         res.status(500).json({ message: error.message })
@@ -107,7 +101,6 @@ const vote = async (req, res) => {
                 const src = await Candidate.findOne({ _id: srcId })
                 if (src) {
                     src.votes += 1
-                    src.voters.push(user.matric)
                     await src.save()
                 }
             })
