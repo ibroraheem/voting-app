@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+const morgan = require('morgan');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const connectDB = require('./config/db');
@@ -12,7 +13,7 @@ app.use(cors(
         allowedHeaders: ['Content-Type', 'Authorization', 'Origin', 'x-access-token', 'X-Requested-With', 'Accept', 'Access-Control-Allow-Headers', 'Access-Control-Request-Headers', 'Access-Control-Allow-Origin', 'Access-Control-Allow-Methods', 'Access-Control-Allow-Credentials'],
     }
 ));
-
+app.use(morgan('dev'));
 app.get('/', (req, res) => {
     res.send('Hello World');
 });
