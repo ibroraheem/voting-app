@@ -8,7 +8,7 @@ require('dotenv').config()
 
 const register = async (req, res) => {
     try {
-        const { surname, firstName, level, password } = req.body
+        const { surname, firstName, level, department, password } = req.body
         let matric = req.body.matric
         matric = matric.toLowerCase()
         const user = await User.findOne({ matric })
@@ -16,25 +16,15 @@ const register = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10)
         const otp = Math.floor(100000 + Math.random() * 900000).toString()
         const otpExpires = Date.now() + 3600000
-        const isMatricValid = matric.includes('30G') || matric.includes('30g')
+        const isMatricValid = matric.includes('10a') || matric.includes('10a')
         if (!isMatricValid) return res.status(400).json({ message: 'Invalid matric number' })
-        const dept = matric.includes('30gc') ? 'ELE' :
-            matric.includes('30gb') ? 'CVE' :
-                matric.includes('30gq') ? 'WRE' :
-                    matric.includes('30gn') ? 'MME' :
-                        matric.includes('30ga') ? 'ABE' :
-                            matric.includes('30gr') ? 'CPE' :
-                                matric.includes('30gm') ? 'CHE' :
-                                    matric.includes('30gp') ? 'BME' :
-                                        matric.includes('30gt') ? 'FBE' :
-                                            'MEE'
         const email = matric.replace('/', '-') + '@students.unilorin.edu.ng'
         const newUser = new User({
             matric: matric.toLowerCase(),
             surname,
             firstName,
             level,
-            department: dept,
+            department,
             otp,
             email,
             otpExpires,
@@ -57,7 +47,7 @@ const register = async (req, res) => {
             html: `<h1>Hi ${firstName},</h1><p><strong>Your verification code is ${otp}</strong></p>
             <p>It expires in 1 hour</p>
             <p>Regards,</p>
-            <p>NISEC 2023</p>`
+            <p>NISEC 2024</p>`
         }
         transporter.sendMail(mailOptions, (err, info) => {
             if (err) {
@@ -136,7 +126,7 @@ const resendOTP = async (req, res) => {
             html: `<h1>Hi ${user.firstName},</h1><p><strong>Your verification code is ${otp}</strong></p>
             <p>It expires in 1 hour</p>
             <p>Regards,</p>
-            <p>NISEC 2023</p>`
+            <p>NISEC 2024</p>`
         }
         transporter.sendMail(mailOptions, (err, info) => {
             if (err) {
@@ -178,7 +168,7 @@ const forgotPassword = async (req, res) => {
             html: `<h1>Hi ${user.firstName},</h1><p><strong>Your password reset code is ${otp}</strong></p>
             <p>It expires in 1 hour</p>
             <p>Regards,</p>
-            <p>NISEC 2023</p>`
+            <p>NISEC 2024</p>`
         }
         transporter.sendMail(mailOptions, (err, info) => {
             if (err) {

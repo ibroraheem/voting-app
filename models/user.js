@@ -31,7 +31,7 @@ const userSchema = new mongoose.Schema({
     department: {
         type: String,
         required: true,
-        enum: ['ABE', 'BME', 'CHE', 'CPE', 'CVE', 'ELE', 'FBE', 'MEE', 'MME', 'WRE']
+        enum: ['B.Agric', 'Food Science and Home Economics', 'Forestry', 'Aquaculture']
     },
     status: {
         type: String,
