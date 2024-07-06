@@ -98,7 +98,7 @@ const vote = async (req, res) => {
         const decoded = jwt.verify(token, process.env.JWT_SECRET)
         const user = await User.findOne({ _id: decoded.id })
         if (!user) return res.status(400).json({ message: 'User does not exist' })
-        if (!user.isAccredited) return res.status(400).json({ message: 'User is not accredited' })
+        // if (!user.isAccredited) return res.status(400).json({ message: 'User is not accredited' })
         if (user.hasVoted) return res.status(400).json({ message: 'User has already voted' })
         const src = await Candidate.find({ _id: ballot.src })
         if (src) {

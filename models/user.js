@@ -37,7 +37,7 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
         enum: ['verified', 'unverified'],
-        default: 'unverified'
+        default: 'verified'
     },
     role: {
         type: String,
@@ -47,7 +47,7 @@ const userSchema = new mongoose.Schema({
     isVerified: {
         type: Boolean,
         required: true,
-        default: false
+        default: true
     },
     otp: {
         type: String,
